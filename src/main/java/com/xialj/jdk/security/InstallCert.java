@@ -25,14 +25,16 @@ public class InstallCert {
 		String host;
 		int port;
 		char[] passphrase;
-		if ((args.length == 1) || (args.length == 2)) {
+		boolean forceWrite = false;
+		if ((args.length == 1) || (args.length == 2) || (args.length == 3)) {
 			String[] c = args[0].split(":");
 			host = c[0];
 			port = (c.length == 1) ? 443 : Integer.parseInt(c[1]);
 			String p = (args.length == 1) ? "changeit" : args[1];
 			passphrase = p.toCharArray();
+			forceWrite = (c.length == 3) ? Boolean.parseBoolean(args[2]):false;
 		} else {
-			System.out.println("Usage: java InstallCert <host>[:port] [passphrase]");
+			System.out.println("Usage: java InstallCert <host>[:port] [passphrase] [forceWrite(boolean)]");
 			return;
 		}
 
@@ -93,14 +95,14 @@ public class InstallCert {
 			System.out.println("   md5     " + toHexString(md5.digest()));
 			System.out.println();
 		}
-
-		System.out.println("Enter certificate to add to trusted keystore or 'y' or 'yes',to go on");
-		String line = reader.readLine().trim();
-		if(!("yes".equals(line) || "y".equals(line))) {
-			System.out.println("KeyStore not changed");
-			return;
+		if(!forceWrite) {
+			System.out.println("Enter certificate to add to trusted keystore or 'y' or 'yes',to go on");
+			String line = reader.readLine().trim();
+			if(!("yes".equals(line) || "y".equals(line))) {
+				System.out.println("KeyStore not changed");
+				return;
+			}
 		}
-
 		X509Certificate cert = chain[0];
 		String alias = host;
 		ks.setCertificateEntry(alias, cert);

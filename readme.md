@@ -10,9 +10,18 @@
 
 ### 使用方法
 ```shell
-java -jar jdk-pkix-solver-*.jar {添加的域名}
+java -jar jdk-pkix-solver-*.jar {添加的域名} {口令} {是否强制}
 ```
 如：
+- 简单模式
 ```shell
 java -jar jdk-pkix-solver-1.0.0.jar repo.maven.apache.org
+```
+- 修改口令模式
+```shell
+java -jar jdk-pkix-solver-1.0.0.jar repo.maven.apache.org changeit
+```
+- 强制模式
+```shell
+java -jar jdk-pkix-solver-1.0.0.jar repo.maven.apache.org changeit true
 ```
